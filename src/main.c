@@ -8,10 +8,13 @@
 void _entry() {
     NtPuts(L"Press Any Key\n");
     HANDLE hKeyboard;
+    HANDLE hEvent;
     NtOpenKeyboard(&hKeyboard);
-    WaitForKeyPress(hKeyboard);
-    
-    //NtPuts(L"idk");
-    while(1){continue;}
+    while(1){
+        NtCreateKeyboardEvent(&hEvent);
+        NtSleepMilliseconds(9);
+        GetKeyPress(hKeyboard, hEvent);
+        NtClose(hEvent);
+    }
 }
 

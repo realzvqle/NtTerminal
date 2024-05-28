@@ -89,7 +89,8 @@ extern NTSTATUS NTAPI NtCreateFile(PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, PIO
 extern NTSTATUS NTAPI NtOpenFile(PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, PIO_STATUS_BLOCK, ULONG, ULONG);
 extern NTSTATUS NTAPI NtWaitForSingleObject(HANDLE, BOOLEAN, PLARGE_INTEGER);
 extern NTSTATUS NTAPI NtReadFile(HANDLE, HANDLE, PIO_APC_ROUTINE, PVOID, PIO_STATUS_BLOCK, PVOID, ULONG, PLARGE_INTEGER, PULONG);
-extern NTSTATUS NTAPI NtTerminateProcess(HANDLE ProcessHandle, NTSTATUS ExitStatus);
+extern NTSTATUS NTAPI NtTerminateProcess(HANDLE, NTSTATUS);
+extern NTSTATUS NTAPI NtClose(HANDLE);
 FORCEINLINE VOID RtlInitUnicodeString(
     _Out_ PUNICODE_STRING DestinationString,
     _In_opt_z_ PCWSTR SourceString
@@ -109,7 +110,11 @@ NTSTATUS NtSleep(int seconds);
 NTSTATUS NtBlueScreen(NTSTATUS Status);
 WCHAR* NtStatusToWString(NTSTATUS status, WCHAR* str);
 NTSTATUS NtOpenKeyboard(PHANDLE KeyboardHandle);
-void WaitForKeyPress(HANDLE hKeyboard);
+USHORT WaitForKeyPress(HANDLE hKeyboard, HANDLE hEvent);
 VOID ZivPrintNtStatus(IN WCHAR* FunctionName, IN NTSTATUS Status);
-
+NTSTATUS NtSleepMilliseconds(int milliseconds);
+WCHAR MakeCodeToWChar(USHORT makeCode);
+void GetKeyPress(HANDLE hKeyBoard, HANDLE hEvent);
+NTSTATUS NtCreateKeyboardEvent(PHANDLE EVENT);
+void GetKeyAndPrint(HANDLE hKeyboard);
 #endif
