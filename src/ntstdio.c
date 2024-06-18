@@ -190,7 +190,7 @@ NTSTATUS NtOpenKeyboard(PHANDLE KeyboardHandle) {
 }
 
 NTSTATUS NtCreateKeyboardEvent(PHANDLE EVENT){
-        OBJECT_ATTRIBUTES ObjectAttributes;
+    OBJECT_ATTRIBUTES ObjectAttributes;
 
     InitializeObjectAttributes(&ObjectAttributes, NULL, 0, NULL, NULL);
     NTSTATUS status = NtCreateEvent(EVENT, EVENT_ALL_ACCESS, &ObjectAttributes, NotificationEvent, FALSE);       
@@ -231,8 +231,14 @@ USHORT WaitForKeyPress(HANDLE hKeyboard, HANDLE hEvent) {
 }
 
 void GetKeyPress(HANDLE hKeyboard, HANDLE hEvent) {
+    static USHORT prev_key = 0;
     USHORT key = WaitForKeyPress(hKeyboard, hEvent);
     WCHAR* idk = WCharToWCharPtr(MakeCodeToWChar(key));
+    NtSleepMilliseconds(80);
+    if(prev_key == key){
+        return;
+    }
+    prev_key = key;
     NtPuts(idk);
     ZivFreeMemory(idk, 2 * sizeof(WCHAR));
 }
